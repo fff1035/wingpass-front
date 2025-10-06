@@ -24,9 +24,9 @@
           
           <div class="ticket-info">
             <div class="route">
-              <span class="city">{{ ticket.from }}</span>
+              <span class="city">{{ airportMap[ticket.from] || ticket.from }}</span>
               <span class="arrow">→</span>
-              <span class="city">{{ ticket.to }}</span>
+              <span class="city">{{ airportMap[ticket.to] || ticket.to }}</span>
             </div>
             <div class="date-time">
               {{ ticket.date }} {{ ticket.time }}
@@ -63,7 +63,7 @@
         <h3>确认退票</h3>
         <div v-if="selectedTicket">
           <p>航班: {{ selectedTicket.flightNumber }}</p>
-          <p>航线: {{ selectedTicket.from }} → {{ selectedTicket.to }}</p>
+          <p>航线: {{ airportMap[selectedTicket.from] || selectedTicket.from }} → {{ airportMap[selectedTicket.to] || selectedTicket.to }}</p>
           <p>日期: {{ selectedTicket.date }} {{ selectedTicket.time }}</p>
           <p>乘客: {{ selectedTicket.passengerName }}</p>
           <p class="refund-amount">
@@ -106,7 +106,20 @@ export default {
       selectedTicket: null,
       refundSuccess: false,
       loading: false,
-      errorMessage: ''
+      errorMessage: '',
+      // 机场代码到机场名称的映射表
+      airportMap: {
+        'PEK': '北京首都国际机场',
+        'SHA': '上海虹桥国际机场',
+        'CAN': '广州白云国际机场',
+        'SZX': '深圳宝安国际机场',
+        'CTU': '成都双流国际机场',
+        'KMG': '昆明长水国际机场',
+        'HGH': '杭州萧山国际机场',
+        'XIY': '西安咸阳国际机场',
+        'NKG': '南京禄口国际机场',
+        'TSN': '天津滨海国际机场'
+      }
     }
   },
   created() {

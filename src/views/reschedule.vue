@@ -24,9 +24,9 @@
           
           <div class="ticket-info">
             <div class="route">
-              <span class="city">{{ ticket.from }}</span>
+              <span class="city">{{ airportMap[ticket.from] || ticket.from }}</span>
               <span class="arrow">→</span>
-              <span class="city">{{ ticket.to }}</span>
+              <span class="city">{{ airportMap[ticket.to] || ticket.to }}</span>
             </div>
             <div class="date-time">
               {{ ticket.date }} {{ ticket.time }}
@@ -73,12 +73,12 @@
             <div class="flight-info">
               <div class="route">
                 <div class="city-time">
-                  <span class="city">{{ flight.from }}</span>
+                  <span class="city">{{ airportMap[flight.from] || flight.from }}</span>
                   <span class="time">{{ flight.time }}</span>
                 </div>
                 <div class="duration">约2小时30分钟</div>
                 <div class="city-time">
-                  <span class="city">{{ flight.to }}</span>
+                  <span class="city">{{ airportMap[flight.to] || flight.to }}</span>
                   <span class="time">{{ calculateArrivalTime(flight.time) }}</span>
                 </div>
               </div>
@@ -102,7 +102,7 @@
           <div class="ticket-comparison">
             <div class="original-ticket">
               <h4>原航班</h4>
-              <p>{{ selectedTicket.flightNumber }} | {{ selectedTicket.from }} → {{ selectedTicket.to }}</p>
+              <p>{{ selectedTicket.flightNumber }} | {{ airportMap[selectedTicket.from] || selectedTicket.from }} → {{ airportMap[selectedTicket.to] || selectedTicket.to }}</p>
               <p>{{ selectedTicket.date }} {{ selectedTicket.time }}</p>
               <p>票价: ¥{{ selectedTicket.price }}</p>
             </div>
@@ -111,7 +111,7 @@
             
             <div class="new-ticket">
               <h4>新航班</h4>
-              <p>{{ selectedNewFlight.id }} | {{ selectedNewFlight.from }} → {{ selectedNewFlight.to }}</p>
+              <p>{{ selectedNewFlight.id }} | {{ airportMap[selectedNewFlight.from] || selectedNewFlight.from }} → {{ airportMap[selectedNewFlight.to] || selectedNewFlight.to }}</p>
               <p>{{ selectedNewFlight.date }} {{ selectedNewFlight.time }}</p>
               <p>票价: ¥{{ selectedNewFlight.price }}</p>
             </div>
@@ -181,7 +181,20 @@ export default {
       loading: false,
       errorMessage: '',
       showConfirmModal: false,
-      rescheduleSuccess: false
+      rescheduleSuccess: false,
+      // 机场代码到机场名称的映射表
+      airportMap: {
+        'PEK': '北京首都国际机场',
+        'SHA': '上海虹桥国际机场',
+        'CAN': '广州白云国际机场',
+        'SZX': '深圳宝安国际机场',
+        'CTU': '成都双流国际机场',
+        'KMG': '昆明长水国际机场',
+        'HGH': '杭州萧山国际机场',
+        'XIY': '西安咸阳国际机场',
+        'NKG': '南京禄口国际机场',
+        'TSN': '天津滨海国际机场'
+      }
     };
   },
   created() {
@@ -229,8 +242,8 @@ export default {
         
         try {
           this.newFlights = await this.store.dispatch('getFlights', {
-            from: this.selectedTicket.from,
-            to: this.selectedTicket.to,
+            from: this.selectedTicket.from, // 这里已经是机场代码
+            to: this.selectedTicket.to, // 这里已经是机场代码
             date: this.newFlightCriteria.date
           });
           

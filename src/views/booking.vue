@@ -6,27 +6,22 @@
     <div class="search-form">
       <h3>查询航班</h3>
       <form @submit.prevent="searchFlights">
-        <div class="form-group">
+        
+      <div class="form-group">
           <label for="from">出发城市</label>
           <select id="from" v-model="searchCriteria.from" required>
-            <option value="北京">北京</option>
-            <option value="上海">上海</option>
-            <option value="广州">广州</option>
-            <option value="深圳">深圳</option>
-            <option value="成都">成都</option>
-            <option value="杭州">杭州</option>
+            <option v-for="airport in airportList" :key="airport.iata_code" :value="airport.iata_code">
+              {{ airport.name }}
+            </option>
           </select>
         </div>
         
         <div class="form-group">
           <label for="to">到达城市</label>
           <select id="to" v-model="searchCriteria.to" required>
-            <option value="北京">北京</option>
-            <option value="上海">上海</option>
-            <option value="广州">广州</option>
-            <option value="深圳">深圳</option>
-            <option value="成都">成都</option>
-            <option value="杭州">杭州</option>
+            <option v-for="airport in airportList" :key="airport.iata_code" :value="airport.iata_code">
+              {{ airport.name }}
+            </option>
           </select>
         </div>
         
@@ -51,12 +46,12 @@
           <div class="flight-info">
             <div class="route">
               <div class="city-time">
-                <span class="city">{{ flight.from }}</span>
+                <span class="city">{{ airportMap[flight.from] || flight.from }}</span>
                 <span class="time">{{ flight.time }}</span>
               </div>
               <div class="duration">约2小时30分钟</div>
               <div class="city-time">
-                <span class="city">{{ flight.to }}</span>
+                <span class="city">{{ airportMap[flight.to] || flight.to }}</span>
                 <span class="time">{{ calculateArrivalTime(flight.time) }}</span>
               </div>
             </div>
@@ -75,7 +70,7 @@
       <form @submit.prevent="submitBooking">
         <div class="flight-summary">
           <h4>航班信息</h4>
-          <p>{{ selectedFlight.id }} | {{ selectedFlight.from }} → {{ selectedFlight.to }} | {{ selectedFlight.date }} {{ selectedFlight.time }}</p>
+          <p>{{ selectedFlight.id }} | {{ airportMap[selectedFlight.from] || selectedFlight.from }} → {{ airportMap[selectedFlight.to] || selectedFlight.to }} | {{ selectedFlight.date }} {{ selectedFlight.time }}</p>
           <p>价格: ¥{{ selectedFlight.price }}</p>
         </div>
         
@@ -112,6 +107,7 @@
 
 <script>
 import { inject } from 'vue';
+import airportService from '../api/airportService.js';
 
 export default {
   name: "booking",
@@ -122,9 +118,13 @@ export default {
   },
   data() {
     return {
+      // 机场代码到城市名称的映射表
+      airportMap: {},
+      // 机场列表
+      airportList: [],
       searchCriteria: {
-        from: '北京',
-        to: '上海',
+        from: '',
+        to: '',
         date: ''
       },
       flights: [],
@@ -146,6 +146,9 @@ export default {
     this.today = today.toISOString().split('T')[0];
     // 默认设置日期为今天
     this.searchCriteria.date = this.today;
+    
+    // 加载机场数据
+    this.loadAirportData();
   },
   computed: {
     availableFlights() {
@@ -153,6 +156,30 @@ export default {
     }
   },
   methods: {
+    // 加载机场数据
+    async loadAirportData() {
+      try {
+        // 从机场服务获取机场列表
+        this.airportList = await airportService.loadAirports();
+        // 创建机场代码到名称的映射表
+        this.airportMap = {};
+        this.airportList.forEach(airport => {
+          this.airportMap[airport.iata_code] = airport.name;
+        });
+        
+        // 设置默认值为第一个机场
+        if (this.airportList.length > 0) {
+          this.searchCriteria.from = this.airportList[0].iata_code;
+          // 如果有多个机场，设置不同的出发和到达城市
+          this.searchCriteria.to = this.airportList.length > 1 ? 
+            this.airportList[1].iata_code : 
+            this.airportList[0].iata_code;
+        }
+      } catch (error) {
+        console.error('加载机场数据失败:', error);
+      }
+    },
+
     async searchFlights() {
       if (this.searchCriteria.from === this.searchCriteria.to) {
         alert('出发城市和到达城市不能相同');
@@ -199,15 +226,19 @@ export default {
     async submitBooking() {
       if (this.store && this.selectedFlight) {
         // 根据后端API文档，构建BookingCreateRequest格式的数据
+        // 注意：flightId应该是航班实体的ID，而不是航班号
+        // 从航班号中提取数字部分作为flightId
+        const flightId = parseInt(this.selectedFlight.id.replace(/\D/g, '')) || 1;
+        
         const bookingData = {
           agencyId: 1, // 根据实际情况设置
-          flightId: this.selectedFlight.id,
+          flightId: flightId, // 系统会通过这个ID查询到正确的航班信息
           totalAmount: this.selectedFlight.price,
           depositAmount: 0,
           deadlinePickupAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24小时后
           passengers: [
             {
-              passengerId: 3, // 根据实际情况设置
+              passengerId: 1, // 在实际应用中应该是真实的旅客ID
               seatNo: '12A' // 座位号可选
             }
           ]
