@@ -2,9 +2,56 @@
 import ticketAPI from '../api/ticket.js';
 import { createStore } from 'vuex';
 
+// 模拟机场列表 - 用于store初始化
+const mockAirports = [
+  { name: '北京首都国际机场', municipality: '北京', iata_code: 'PEK' },
+  { name: '上海浦东国际机场', municipality: '上海', iata_code: 'PVG' },
+  { name: '上海虹桥国际机场', municipality: '上海', iata_code: 'SHA' },
+  { name: '广州白云国际机场', municipality: '广州', iata_code: 'CAN' },
+  { name: '深圳宝安国际机场', municipality: '深圳', iata_code: 'SZX' },
+  { name: '成都天府国际机场', municipality: '成都', iata_code: 'TFU' }
+];
+
 const state = {
   tickets: [],
-  availableFlights: []
+  availableFlights: [
+    {
+      id: 'CA1234',
+      from: 'PEK',
+      to: 'SHA',
+      date: '2024-05-15',
+      time: '09:00',
+      price: 1200,
+      seatsAvailable: 15
+    },
+    {
+      id: 'CA1235',
+      from: 'PEK',
+      to: 'SHA',
+      date: '2024-05-15',
+      time: '14:00',
+      price: 1300,
+      seatsAvailable: 8
+    },
+    {
+      id: 'MU5137',
+      from: 'SHA',
+      to: 'CAN',
+      date: '2024-05-15',
+      time: '10:30',
+      price: 980,
+      seatsAvailable: 12
+    },
+    {
+      id: 'CZ3143',
+      from: 'CAN',
+      to: 'PEK',
+      date: '2024-05-15',
+      time: '16:45',
+      price: 1500,
+      seatsAvailable: 5
+    }
+  ]
 };
 
 const mutations = {
@@ -15,7 +62,7 @@ const mutations = {
     state.tickets.push({
       ...ticket,
       id: Date.now().toString(),
-      status: 'booked'
+      status: ticket.status || 'booked' // 使用传入的status或默认值
     });
   },
   updateTicket(state, updatedTicket) {
