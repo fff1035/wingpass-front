@@ -321,8 +321,8 @@ export const ticketAPI = {
       return result.list.map(booking => ({
         id: booking.id.toString(),
         flightNumber: 'CA' + booking.flightId.toString().padStart(4, '0'),
-        from: '北京', // 简化处理
-        to: '上海', // 简化处理
+        from: 'PEK', // 使用机场代码而不是城市名称
+        to: 'SHA', // 使用机场代码而不是城市名称
         date: booking.deadlinePickupAt.split('T')[0], // 简化处理
         time: '12:00', // 简化处理
         price: booking.totalAmount,
@@ -338,8 +338,8 @@ export const ticketAPI = {
         {
           id: '1',
           flightNumber: 'CA1234',
-          from: '北京',
-          to: '上海',
+          from: 'PEK', // 使用机场代码
+          to: 'SHA', // 使用机场代码
           date: '2024-05-15',
           time: '09:00',
           price: 1200,
@@ -351,8 +351,8 @@ export const ticketAPI = {
         {
           id: '2',
           flightNumber: 'MU5678',
-          from: '上海',
-          to: '广州',
+          from: 'SHA', // 使用机场代码
+          to: 'CAN', // 使用机场代码
           date: '2024-05-20',
           time: '14:30',
           price: 800,
