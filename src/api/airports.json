@@ -1,0 +1,497 @@
+[
+  {
+    "name": "北京首都国际机场",
+    "municipality": "北京",
+    "iata_code": "PEK"
+  },
+  {
+    "name": "上海浦东国际机场",
+    "municipality": "上海",
+    "iata_code": "PVG"
+  },
+  {
+    "name": "上海虹桥国际机场",
+    "municipality": "上海",
+    "iata_code": "SHA"
+  },
+  {
+    "name": "广州白云国际机场",
+    "municipality": "广州",
+    "iata_code": "CAN"
+  },
+  {
+    "name": "西安咸阳国际机场",
+    "municipality": "西安",
+    "iata_code": "XIY"
+  },
+  {
+    "name": "成都双流国际机场",
+    "municipality": "成都",
+    "iata_code": "CTU"
+  },
+  {
+    "name": "深圳宝安国际机场",
+    "municipality": "深圳",
+    "iata_code": "SZX"
+  },
+  {
+    "name": "昆明长水国际机场",
+    "municipality": "昆明",
+    "iata_code": "KMG"
+  },
+  {
+    "name": "厦门高崎国际机场",
+    "municipality": "厦门",
+    "iata_code": "XMN"
+  },
+  {
+    "name": "杭州萧山国际机场",
+    "municipality": "杭州",
+    "iata_code": "HGH"
+  },
+  {
+    "name": "武汉天河国际机场",
+    "municipality": "武汉",
+    "iata_code": "WUH"
+  },
+  {
+    "name": "桂林两江国际机场",
+    "municipality": "桂林",
+    "iata_code": "KWL"
+  },
+  {
+    "name": "流亭机场",
+    "municipality": "青岛",
+    "iata_code": "TAO"
+  },
+  {
+    "name": "重庆江北国际机场",
+    "municipality": "重庆",
+    "iata_code": "CKG"
+  },
+  {
+    "name": "大连周水子国际机场",
+    "municipality": "大连",
+    "iata_code": "DLC"
+  },
+  {
+    "name": "天津滨海国际机场",
+    "municipality": "天津",
+    "iata_code": "TSN"
+  },
+  {
+    "name": "南京禄口机场",
+    "municipality": "南京",
+    "iata_code": "NKG"
+  },
+  {
+    "name": "遥墙机场",
+    "municipality": "济南",
+    "iata_code": "TNA"
+  },
+  {
+    "name": "丽江机场",
+    "municipality": "丽江",
+    "iata_code": "LJG"
+  },
+  {
+    "name": "郑州新郑国际机场",
+    "municipality": "郑州",
+    "iata_code": "CGO"
+  },
+  {
+    "name": "宁波栎社国际机场",
+    "municipality": "宁波",
+    "iata_code": "NGB"
+  },
+  {
+    "name": "太平机场",
+    "municipality": "哈尔滨",
+    "iata_code": "HRB"
+  },
+  {
+    "name": "福州长乐国际机场",
+    "municipality": "福州",
+    "iata_code": "FOC"
+  },
+  {
+    "name": "沈阳桃仙国际机场",
+    "municipality": "沈阳",
+    "iata_code": "SHE"
+  },
+  {
+    "name": "乌鲁木齐地窝堡国际机场",
+    "municipality": "乌鲁木齐",
+    "iata_code": "URC"
+  },
+  {
+    "name": "太原武宿机场",
+    "municipality": "太原",
+    "iata_code": "TYN"
+  },
+  {
+    "name": "三亚凤凰国际机场",
+    "municipality": "三亚",
+    "iata_code": "SYX"
+  },
+  {
+    "name": "屯溪国际机场",
+    "municipality": "黄山",
+    "iata_code": "TXN"
+  },
+  {
+    "name": "拉萨贡嘎机场",
+    "municipality": "拉萨",
+    "iata_code": "LXA"
+  },
+  {
+    "name": "龙嘉机场",
+    "municipality": "长春",
+    "iata_code": "CGQ"
+  },
+  {
+    "name": "珠海金湾机场",
+    "municipality": "珠海",
+    "iata_code": "ZUH"
+  },
+  {
+    "name": "兰州中川机场",
+    "municipality": "兰州",
+    "iata_code": "LHW"
+  },
+  {
+    "name": "海口美兰国际机场",
+    "municipality": "海口",
+    "iata_code": "HAK"
+  },
+  {
+    "name": "合肥骆岗国际机场",
+    "municipality": "合肥",
+    "iata_code": "HFE"
+  },
+  {
+    "name": "北京南苑机场",
+    "municipality": "北京",
+    "iata_code": "NAY"
+  },
+  {
+    "name": "温州龙湾国际机场",
+    "municipality": "温州",
+    "iata_code": "WNZ"
+  },
+  {
+    "name": "宜昌三峡机场",
+    "municipality": "宜昌",
+    "iata_code": "YIH"
+  },
+  {
+    "name": "南昌昌北国际机场",
+    "municipality": "南昌",
+    "iata_code": "KHN"
+  },
+  {
+    "name": "白塔国际机场",
+    "municipality": "呼和浩特",
+    "iata_code": "HET"
+  },
+  {
+    "name": "龙洞堡机场",
+    "municipality": "贵阳",
+    "iata_code": "KWE"
+  },
+  {
+    "name": "西宁曹家堡机场",
+    "municipality": "西宁",
+    "iata_code": "XNN"
+  },
+  {
+    "name": "常州奔牛机场",
+    "municipality": "常州",
+    "iata_code": "CZX"
+  },
+  {
+    "name": "泉州晋江国际机场",
+    "municipality": "泉州",
+    "iata_code": "JJN"
+  },
+  {
+    "name": "苏南硕放国际机场",
+    "municipality": "无锡",
+    "iata_code": "WUX"
+  },
+  {
+    "name": "西安西关机场",
+    "municipality": "西安",
+    "iata_code": "SIA"
+  },
+  {
+    "name": "九寨黄龙机场",
+    "municipality": "九寨沟",
+    "iata_code": "JZH"
+  },
+  {
+    "name": "南宁吴圩机场",
+    "municipality": "南宁",
+    "iata_code": "NNG"
+  },
+  {
+    "name": "包头机场",
+    "municipality": "包头",
+    "iata_code": "BAV"
+  },
+  {
+    "name": "黄岩路桥机场",
+    "municipality": "黄岩",
+    "iata_code": "HYN"
+  },
+  {
+    "name": "威海机场",
+    "municipality": "威海",
+    "iata_code": "WEH"
+  },
+  {
+    "name": "西昌青山机场",
+    "municipality": "西昌",
+    "iata_code": "XIC"
+  },
+  {
+    "name": "大庸机场",
+    "municipality": "大庸",
+    "iata_code": "DYG"
+  },
+  {
+    "name": "连云港机场",
+    "municipality": "连云港",
+    "iata_code": "LYG"
+  },
+  {
+    "name": "洛阳机场",
+    "municipality": "洛阳",
+    "iata_code": "LYA"
+  },
+  {
+    "name": "南通机场",
+    "municipality": "南通",
+    "iata_code": "NTG"
+  },
+  {
+    "name": "大理机场",
+    "municipality": "下关",
+    "iata_code": "DLU"
+  },
+  {
+    "name": "盐城机场",
+    "municipality": "盐城",
+    "iata_code": "YNZ"
+  },
+  {
+    "name": "北京大兴国际机场",
+    "municipality": "北京",
+    "iata_code": "PKX"
+  },
+  {
+    "name": "东营胜利机场",
+    "municipality": "东营",
+    "iata_code": "DOY"
+  },
+  {
+    "name": "井冈山机场",
+    "municipality": "吉安",
+    "iata_code": "JGS"
+  },
+  {
+    "name": "烟台蓬莱国际机场",
+    "municipality": "烟台",
+    "iata_code": "YNT"
+  },
+  {
+    "name": "运城关公机场",
+    "municipality": "运城",
+    "iata_code": "YCU"
+  },
+  {
+    "name": "长沙黄花国际机场",
+    "municipality": "长沙",
+    "iata_code": "CSX"
+  },
+  {
+    "name": "石家庄大郭村国际机场",
+    "municipality": "石家庄",
+    "iata_code": "SJW"
+  },
+  {
+    "name": "西双版纳嘎洒机场",
+    "municipality": "景洪",
+    "iata_code": "JHG"
+  },
+  {
+    "name": "和田机场",
+    "municipality": "和田",
+    "iata_code": "HTN"
+  },
+  {
+    "name": "林芝机场",
+    "municipality": "林芝",
+    "iata_code": "LZY"
+  },
+  {
+    "name": "大同机场",
+    "municipality": "大同",
+    "iata_code": "DAT"
+  },
+  {
+    "name": "揭阳潮汕国际机场",
+    "municipality": "揭阳",
+    "iata_code": "SWA"
+  },
+  {
+    "name": "柳州白莲机场",
+    "municipality": "柳州",
+    "iata_code": "LZH"
+  },
+  {
+    "name": "梅州梅县长岗岌国际机场",
+    "municipality": "梅州",
+    "iata_code": "MXZ"
+  },
+  {
+    "name": "迪庆机场",
+    "municipality": "香格里拉",
+    "iata_code": "DIG"
+  },
+  {
+    "name": "襄阳刘集机场",
+    "municipality": "襄阳",
+    "iata_code": "XFN"
+  },
+  {
+    "name": "徐州观音机场",
+    "municipality": "徐州",
+    "iata_code": "XUZ"
+  },
+  {
+    "name": "银川新城空军基地",
+    "municipality": "银川",
+    "iata_code": "YEH"
+  },
+  {
+    "name": "义乌机场",
+    "municipality": "义乌",
+    "iata_code": "YIW"
+  },
+  {
+    "name": "安阳机场",
+    "municipality": "安阳",
+    "iata_code": "AYN"
+  },
+  {
+    "name": "哈密机场",
+    "municipality": "哈密",
+    "iata_code": "HMI"
+  },
+  {
+    "name": "吉林机场",
+    "municipality": "吉林",
+    "iata_code": "JIL"
+  },
+  {
+    "name": "梧州长洲岛机场",
+    "municipality": "梧州",
+    "iata_code": "WUZ"
+  },
+  {
+    "name": "阿勒泰机场",
+    "municipality": "阿勒泰",
+    "iata_code": "AAT"
+  },
+  {
+    "name": "邯郸机场",
+    "municipality": "邯郸",
+    "iata_code": "HDG"
+  },
+  {
+    "name": "临沧机场",
+    "municipality": "临沧",
+    "iata_code": "LNJ"
+  },
+  {
+    "name": "吕梁机场",
+    "municipality": "吕梁",
+    "iata_code": "LLV"
+  },
+  {
+    "name": "古莲机场",
+    "municipality": "漠河",
+    "iata_code": "OHE"
+  },
+  {
+    "name": "鄂尔多斯伊金霍洛机场",
+    "municipality": "鄂尔多斯",
+    "iata_code": "DSN"
+  },
+  {
+    "name": "保安营机场",
+    "municipality": "攀枝花",
+    "iata_code": "PZI"
+  },
+  {
+    "name": "甘南夏河机场",
+    "municipality": "夏河",
+    "iata_code": "GXH"
+  },
+  {
+    "name": "宜春明月山机场",
+    "municipality": "宜春",
+    "iata_code": "YIC"
+  },
+  {
+    "name": "银川河东国际机场",
+    "municipality": "银川",
+    "iata_code": "INC"
+  },
+  {
+    "name": "阜阳西关机场",
+    "municipality": "阜阳",
+    "iata_code": "FUG"
+  },
+  {
+    "name": "玉树巴塘机场",
+    "municipality": "玉树",
+    "iata_code": "YUS"
+  },
+  {
+    "name": "遵义新舟机场",
+    "municipality": "遵义",
+    "iata_code": "ZYI"
+  },
+  {
+    "name": "呼伦贝尔海拉尔机场",
+    "municipality": "海拉尔",
+    "iata_code": "HLD"
+  },
+  {
+    "name": "黑河爱辉机场",
+    "municipality": "黑河",
+    "iata_code": "HEK"
+  },
+  {
+    "name": "阿克苏温宿机场",
+    "municipality": "阿克苏",
+    "iata_code": "AKU"
+  },
+  {
+    "name": "昌都邦达机场",
+    "municipality": "邦达",
+    "iata_code": "BPX"
+  },
+  {
+    "name": "赤峰机场",
+    "municipality": "赤峰",
+    "iata_code": "CIF"
+  },
+  {
+    "name": "敦煌机场",
+    "municipality": "敦煌",
+    "iata_code": "DNH"
+  }
+]

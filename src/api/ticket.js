@@ -6,6 +6,7 @@ const API_BASE_URL = 'http://localhost:8080/api';
 
 // 创建axios实例
 import axios from 'axios';
+import { loadAirports } from './airportService.js';
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
@@ -89,27 +90,83 @@ export const ticketAPI = {
       return await apiClient.get('/flights', { params });
     } catch (error) {
       console.error('获取航班列表失败:', error);
-      // 返回模拟数据作为降级方案
-      return [
-        {
-          id: 'CA1234',
-          from: params.from || '北京',
-          to: params.to || '上海',
-          date: params.date || '2024-05-15',
-          time: '09:00',
-          price: 1200,
-          seatsAvailable: 15
-        },
-        {
-          id: 'CA1235',
-          from: params.from || '北京',
-          to: params.to || '上海',
-          date: params.date || '2024-05-15',
-          time: '14:00',
-          price: 1300,
-          seatsAvailable: 8
+      // 从机场服务获取机场列表
+      const airports = await loadAirports();
+      
+      // 如果没有机场数据或参数中指定了机场，则使用默认的硬编码模拟数据
+      if (airports.length === 0 || params.from && params.to) {
+        return [
+          {
+            id: 'CA1234',
+            from: params.from || 'PEK',
+            to: params.to || 'SHA',
+            date: params.date || '2024-05-15',
+            time: '09:00',
+            price: 1200,
+            seatsAvailable: 15
+          },
+          {
+            id: 'CA1235',
+            from: params.from || 'PEK',
+            to: params.to || 'SHA',
+            date: params.date || '2024-05-15',
+            time: '14:00',
+            price: 1300,
+            seatsAvailable: 8
+          }
+        ];
+      }
+      
+      // 否则，根据机场列表生成随机的模拟数据
+      const randomFlights = [];
+      const airlines = ['CA', 'MU', 'CZ', 'HU', 'ZH'];
+      const flightNumbers = new Set();
+      
+      // 生成10个随机航班
+      while (randomFlights.length < 10) {
+        // 随机选择出发和到达机场，确保出发和到达机场不同
+        const fromIndex = Math.floor(Math.random() * airports.length);
+        let toIndex = Math.floor(Math.random() * airports.length);
+        while (toIndex === fromIndex) {
+          toIndex = Math.floor(Math.random() * airports.length);
         }
-      ];
+        
+        const fromAirport = airports[fromIndex];
+        const toAirport = airports[toIndex];
+        
+        // 生成随机航班号
+        let flightNumber;
+        do {
+          const airline = airlines[Math.floor(Math.random() * airlines.length)];
+          const number = Math.floor(1000 + Math.random() * 9000);
+          flightNumber = airline + number;
+        } while (flightNumbers.has(flightNumber));
+        flightNumbers.add(flightNumber);
+        
+        // 生成随机起飞时间
+        const hours = Math.floor(Math.random() * 12) + 6; // 6-17点之间
+        const minutes = Math.floor(Math.random() * 4) * 15; // 0, 15, 30, 45分钟
+        const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        
+        // 生成随机价格
+        const basePrice = 500 + Math.random() * 2000; // 500-2500元之间
+        const price = Math.round(basePrice);
+        
+        // 生成随机剩余座位数
+        const seatsAvailable = Math.floor(Math.random() * 20) + 1; // 1-20个座位
+        
+        randomFlights.push({
+          id: flightNumber,
+          from: fromAirport.iata_code,
+          to: toAirport.iata_code,
+          date: params.date || '2024-05-15',
+          time: time,
+          price: price,
+          seatsAvailable: seatsAvailable
+        });
+      }
+      
+      return randomFlights;
     }
   },
 
@@ -153,7 +210,23 @@ export const ticketAPI = {
    */
   createBooking: async (bookingRequest) => {
     try {
-      return await apiClient.post('/booking', bookingRequest);
+      // 确保bookingRequest包含必要的字段
+      if (!bookingRequest || !bookingRequest.agencyId || !bookingRequest.flightId || 
+          !bookingRequest.totalAmount || !bookingRequest.passengers || bookingRequest.passengers.length === 0) {
+        throw new Error('缺少必要的预订信息');
+      }
+      
+      // 格式化请求数据以符合后端要求
+      const formattedRequest = {
+        ...bookingRequest,
+        // 确保passengers数组中的每个对象都有必要的字段
+        passengers: bookingRequest.passengers.map(passenger => ({
+          passengerId: passenger.passengerId || 1,
+          seatNo: passenger.seatNo || null
+        }))
+      };
+      
+      return await apiClient.post('/booking', formattedRequest);
     } catch (error) {
       console.error('创建预订失败:', error);
       // 返回模拟成功结果作为降级方案
@@ -321,8 +394,8 @@ export const ticketAPI = {
       return result.list.map(booking => ({
         id: booking.id.toString(),
         flightNumber: 'CA' + booking.flightId.toString().padStart(4, '0'),
-        from: 'PEK', // 使用机场代码而不是城市名称
-        to: 'SHA', // 使用机场代码而不是城市名称
+        from: 'PEK', // 使用三字码
+        to: 'SHA', // 使用三字码
         date: booking.deadlinePickupAt.split('T')[0], // 简化处理
         time: '12:00', // 简化处理
         price: booking.totalAmount,
@@ -338,8 +411,8 @@ export const ticketAPI = {
         {
           id: '1',
           flightNumber: 'CA1234',
-          from: 'PEK', // 使用机场代码
-          to: 'SHA', // 使用机场代码
+          from: 'PEK', // 使用三字码
+          to: 'SHA', // 使用三字码
           date: '2024-05-15',
           time: '09:00',
           price: 1200,
@@ -351,8 +424,8 @@ export const ticketAPI = {
         {
           id: '2',
           flightNumber: 'MU5678',
-          from: 'SHA', // 使用机场代码
-          to: 'CAN', // 使用机场代码
+          from: 'SHA', // 使用三字码
+          to: 'CAN', // 使用三字码
           date: '2024-05-20',
           time: '14:30',
           price: 800,
