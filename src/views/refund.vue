@@ -194,10 +194,9 @@ export default {
         this.errorMessage = '';
         
         try {
-          // 根据后端API，退票实际上是更新预订状态为REFUNDED
-          await this.store.dispatch('updateBookingStatus', {
-            id: this.selectedTicket.id,
-            status: 'REFUNDED'
+          // 使用新的createRefund API来创建退款请求
+          await this.store.dispatch('createRefund', {
+            bookingId: this.selectedTicket.id
           });
           
           this.closeRefundModal();
