@@ -144,11 +144,12 @@ router.beforeEach((to, from, next) => {
             // 未登录，重定向到登录页面
             next({ path: '/login', query: { redirect: to.fullPath } });
         } else {
+            // 检查用户角色
+            const isAdmin = store?.getters.isAdmin || 
+                           JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'ADMIN';
+            
             // 已登录，检查是否需要管理员权限
             if (to.meta.requiresAdmin) {
-                const isAdmin = store?.getters.isAdmin || 
-                               JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'ADMIN';
-                
                 if (!isAdmin) {
                     // 没有管理员权限，重定向到首页
                     next({ path: '/' });
@@ -157,6 +158,10 @@ router.beforeEach((to, from, next) => {
                 } else {
                     next();
                 }
+            } else if (isAdmin) {
+                // 管理员尝试访问普通用户页面，重定向到航班管理页面
+                next({ path: '/flight-management' });
+                alert('管理员请使用管理员专属功能');
             } else {
                 next();
             }
