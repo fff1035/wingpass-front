@@ -1,15 +1,25 @@
 <template>
   <div class="app">
     <header class="header">
-      <h1>WingPass - 航空票务系统</h1>
+      <div class="header-content">
+        <h1>WingPass - 航空票务系统</h1>
+        <div v-if="isLoggedIn" class="user-info">
+          <span>欢迎，{{ userName }}</span>
+          <button @click="logout" class="logout-btn">登出</button>
+        </div>
+      </div>
     </header>
     
     <nav class="nav">
       <ul>
-        <li><router-link to="/">首页</router-link></li>
+        <li><router-link to="/home">首页</router-link></li>
         <li><router-link to="/booking">机票预订</router-link></li>
         <li><router-link to="/refund">退票申请</router-link></li>
         <li><router-link to="/reschedule">机票改签</router-link></li>
+        <li v-if="isAdmin"><router-link to="/flight-management">航班管理</router-link></li>
+        <li v-else-if="isAgency"><router-link to="/flight-management">旅行社管理</router-link></li>
+        <li v-if="!isLoggedIn"><router-link to="/login">登录</router-link></li>
+        <li v-if="!isLoggedIn"><router-link to="/register">注册</router-link></li>
       </ul>
     </nav>
     
@@ -28,8 +38,33 @@ export default {
   name: 'App',
   data() {
     return {
-      // 组件数据
     }
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn || localStorage.getItem('authToken') !== null;
+    },
+    userName() {
+      const userInfo = this.$store.state.userInfo || JSON.parse(localStorage.getItem('userInfo') || '{}');
+      return userInfo.username || '用户';
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin || JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'ADMIN';
+    },
+    isAgency() {
+      return this.$store.getters.isAgency || JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'AGENCY';
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push('/login');
+      });
+    }
+  },
+  mounted() {
+    // 初始化检查用户登录状态
+    this.$store.dispatch('checkLoginStatus');
   }
 }
 </script>
@@ -47,8 +82,41 @@ export default {
 .header {
   background-color: #646cff;
   color: white;
-  padding: 1rem 0;
-  text-align: center;
+  padding: 1rem 2rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logout-btn {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logout-btn:hover {
+  background-color: #ff7875;
 }
 
 .nav {

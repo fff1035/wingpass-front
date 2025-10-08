@@ -4,7 +4,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-const app = createApp(App).use(router).provide('store', store)
+// 创建应用实例并赋值给全局变量
+const app = createApp(App).use(router).use(store)
+window.app = app
 
 // 初始化数据
 app.mount('#app')
