@@ -66,7 +66,8 @@ const routes = [
         component: flightManagement,
         meta: {
             requiresAuth: true,
-            requiresAdmin: true
+            requiresAdmin: false,
+            requiresAgencyOrAdmin: true
         }
     },
     {
@@ -147,22 +148,43 @@ router.beforeEach((to, from, next) => {
             // 检查用户角色
             const isAdmin = store?.getters.isAdmin || 
                            JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'ADMIN';
+            const isAgency = store?.getters.isAgency || 
+                            JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'AGENCY';
+            const isPassenger = store?.getters.isPassenger || 
+                              JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'PASSENGER';
             
-            // 已登录，检查是否需要管理员权限
-            if (to.meta.requiresAdmin) {
-                if (!isAdmin) {
-                    // 没有管理员权限，重定向到首页
+            // 检查是否需要管理员或机构用户权限
+            if (to.meta.requiresAgencyOrAdmin) {
+                if (!isAdmin && !isAgency) {
+                    // 没有权限，重定向到首页
                     next({ path: '/' });
-                    // 可以添加一个提示
                     alert('您没有权限访问该页面');
                 } else {
                     next();
                 }
-            } else if (isAdmin) {
-                // 管理员尝试访问普通用户页面，重定向到航班管理页面
+            }
+            // 检查是否需要管理员权限
+            else if (to.meta.requiresAdmin) {
+                if (!isAdmin) {
+                    // 没有管理员权限，重定向到首页
+                    next({ path: '/' });
+                    alert('您没有权限访问该页面');
+                } else {
+                    next();
+                }
+            }
+            // 管理员只应访问管理员专属页面和机构/管理员共享页面
+            else if (isAdmin) {
+                // 管理员访问非共享非专属页面，重定向到航班管理页面
                 next({ path: '/flight-management' });
                 alert('管理员请使用管理员专属功能');
-            } else {
+            }
+            // 机构用户只应访问机构/管理员共享页面和普通用户页面
+            else if (isAgency) {
+                next();
+            }
+            // 普通用户访问普通页面
+            else {
                 next();
             }
         }
