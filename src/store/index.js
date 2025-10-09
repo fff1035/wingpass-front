@@ -272,12 +272,12 @@ const actions = {
     }
   },
   
-  // 旅行社注册
+  // 航空公司注册
   async registerAgency(_, agencyData) {
     try {
       return await authAPI.registerAgency(agencyData);
     } catch (error) {
-      console.error('旅行社注册失败:', error);
+      console.error('航空公司注册失败:', error);
       throw error;
     }
   },
