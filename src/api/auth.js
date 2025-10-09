@@ -101,13 +101,13 @@ export const authAPI = {
   },
 
   /**
-   * 旅行社注册
-   * @param {Object} agencyData - 旅行社注册数据
+   * 航空公司注册
+   * @param {Object} agencyData - 航空公司注册数据
    * @returns {Promise} 注册结果Promise
    */
   registerAgency: async (agencyData) => {
     try {
-      // 需要admin权限才能注册旅行社
+      // 需要admin权限才能注册航空公司
       // 在实际使用中，需要先有admin登录的token
       const token = localStorage.getItem('authToken');
       if (token) {
@@ -115,7 +115,7 @@ export const authAPI = {
       }
       return await authClient.post('/register/agency', agencyData);
     } catch (error) {
-      console.error('旅行社注册失败:', error);
+      console.error('航空公司注册失败:', error);
       throw error;
     }
   },
