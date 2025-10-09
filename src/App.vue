@@ -12,13 +12,19 @@
     
     <nav class="nav">
       <ul>
-        <li v-if="isLoggedIn && !isAdmin"><router-link to="/home">首页</router-link></li>
-        <li v-if="isLoggedIn && !isAdmin"><router-link to="/booking">机票预订</router-link></li>
-        <li v-if="isLoggedIn && !isAdmin"><router-link to="/refund">退票申请</router-link></li>
-        <li v-if="isLoggedIn && !isAdmin"><router-link to="/reschedule">机票改签</router-link></li>
-        <li v-if="isAdmin"><router-link to="/flight-management">航班管理</router-link></li>
-        <li v-if="isAdmin"><router-link to="/agency-management">旅行社管理</router-link></li>
-        <li v-if="isAgency"><router-link to="/flight-management">航班管理</router-link></li>
+        <!-- 普通用户功能 - 仅对普通用户可见 -->
+        <li v-if="isLoggedIn && !isAdmin && !isAgency"><router-link to="/home">首页</router-link></li>
+        <li v-if="isLoggedIn && !isAdmin && !isAgency"><router-link to="/booking">机票预订</router-link></li>
+        <li v-if="isLoggedIn && !isAdmin && !isAgency"><router-link to="/refund">退票申请</router-link></li>
+        <li v-if="isLoggedIn && !isAdmin && !isAgency"><router-link to="/reschedule">机票改签</router-link></li>
+        
+        <!-- 机构用户和管理员共享功能 -->
+        <li v-if="isAdmin || isAgency"><router-link to="/flight-management">航班管理</router-link></li>
+        
+        <!-- 管理员专属功能 -->
+        <li v-if="isAdmin"><router-link to="/agency-management">航空公司管理</router-link></li>
+        
+        <!-- 未登录用户 -->
         <li v-if="!isLoggedIn"><router-link to="/login">登录</router-link></li>
         <li v-if="!isLoggedIn"><router-link to="/register">注册</router-link></li>
       </ul>
