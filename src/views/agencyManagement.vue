@@ -1,14 +1,14 @@
 <template>
-  <div class="agency-management-container">
+  <div class="airline-management-container">
     <div class="header">
-      <h1>旅行社管理</h1>
+      <h1>航空公司管理</h1>
       <div class="header-actions">
-        <button class="add-button" @click="showAddAgencyModal">添加旅行社</button>
+        <button class="add-button" @click="showAddAirlineModal">添加航空公司</button>
         <div class="search-box">
           <input 
             type="text" 
             v-model="searchQuery" 
-            placeholder="搜索旅行社名称或联系人"
+            placeholder="搜索航空公司名称或联系人"
             @input="handleSearch"
           />
           <button class="search-button">🔍</button>
@@ -18,30 +18,30 @@
     
     <div v-if="loading" class="loading-container">
       <div class="loading-spinner"></div>
-      <p>加载旅行社信息中...</p>
+      <p>加载航空公司信息中...</p>
     </div>
     
     <div v-else-if="error" class="error-container">
       <p class="error-message">{{ error }}</p>
-      <button @click="fetchAgencies" class="retry-button">重试</button>
+      <button @click="fetchAirlines" class="retry-button">重试</button>
     </div>
     
     <div v-else class="main-content">
-      <div class="agency-stats">
+      <div class="airline-stats">
         <div class="stat-card">
-          <div class="stat-number">{{ totalAgencies }}</div>
-          <div class="stat-label">旅行社总数</div>
+          <div class="stat-number">{{ totalAirlines }}</div>
+          <div class="stat-label">航空公司总数</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">{{ activeAgencies }}</div>
-          <div class="stat-label">活跃旅行社</div>
+          <div class="stat-number">{{ activeAirlines }}</div>
+          <div class="stat-label">活跃航空公司</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">{{ pendingAgencies }}</div>
+          <div class="stat-number">{{ pendingAirlines }}</div>
           <div class="stat-label">待审核</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">{{ suspendedAgencies }}</div>
+          <div class="stat-number">{{ suspendedAirlines }}</div>
           <div class="stat-label">已暂停</div>
         </div>
       </div>
@@ -64,60 +64,60 @@
         </select>
       </div>
       
-      <div class="agency-list">
-        <div v-if="filteredAgencies.length === 0" class="empty-state">
-          <p>暂无符合条件的旅行社</p>
+      <div class="airline-list">
+        <div v-if="filteredAirlines.length === 0" class="empty-state">
+          <p>暂无符合条件的航空公司</p>
         </div>
         
-        <div v-else class="agency-grid">
-          <div v-for="agency in filteredAgencies" :key="agency.id" class="agency-card">
-            <div class="agency-header">
-              <h3>{{ agency.name }}</h3>
-              <span class="status-badge status-{{ agency.status }}">{{ getStatusText(agency.status) }}</span>
+        <div v-else class="airline-grid">
+          <div v-for="airline in filteredAirlines" :key="airline.id" class="airline-card">
+            <div class="airline-header">
+              <h3>{{ airline.name }}</h3>
+              <span class="status-badge status-{{ airline.status }}">{{ getStatusText(airline.status) }}</span>
             </div>
             
-            <div class="agency-info">
+            <div class="airline-info">
               <div class="info-row">
                 <span class="label">联系人:</span>
-                <span class="value">{{ agency.contactPerson }}</span>
+                <span class="value">{{ airline.contactPerson }}</span>
               </div>
               <div class="info-row">
                 <span class="label">联系电话:</span>
-                <span class="value">{{ agency.phone }}</span>
+                <span class="value">{{ airline.phone }}</span>
               </div>
               <div class="info-row">
                 <span class="label">邮箱:</span>
-                <span class="value">{{ agency.email }}</span>
+                <span class="value">{{ airline.email }}</span>
               </div>
               <div class="info-row">
                 <span class="label">地址:</span>
-                <span class="value">{{ agency.address }}</span>
+                <span class="value">{{ airline.address }}</span>
               </div>
               <div class="info-row">
                 <span class="label">创建时间:</span>
-                <span class="value">{{ formatDate(agency.createdAt) }}</span>
+                <span class="value">{{ formatDate(airline.createdAt) }}</span>
               </div>
               <div class="info-row">
                 <span class="label">最近订单:</span>
-                <span class="value">{{ agency.lastOrderDate ? formatDate(agency.lastOrderDate) : '暂无' }}</span>
+                <span class="value">{{ airline.lastOrderDate ? formatDate(airline.lastOrderDate) : '暂无' }}</span>
               </div>
               <div class="info-row">
                 <span class="label">累计订单:</span>
-                <span class="value">{{ agency.bookingCount }} 单</span>
+                <span class="value">{{ airline.bookingCount }} 单</span>
               </div>
               <div class="info-row">
                 <span class="label">佣金比例:</span>
-                <span class="value">{{ agency.commissionRate }}%</span>
+                <span class="value">{{ airline.commissionRate }}%</span>
               </div>
             </div>
             
-            <div class="agency-actions">
-              <button class="view-button" @click="viewAgencyDetail(agency.id)">查看详情</button>
-              <button v-if="agency.status === 'pending'" class="approve-button" @click="approveAgency(agency.id)">通过审核</button>
-              <button v-if="agency.status === 'active'" class="suspend-button" @click="suspendAgency(agency.id)">暂停合作</button>
-              <button v-if="agency.status === 'suspended'" class="activate-button" @click="activateAgency(agency.id)">恢复合作</button>
-              <button class="edit-button" @click="showEditAgencyModal(agency)">编辑</button>
-              <button class="delete-button" @click="deleteAgency(agency.id)">删除</button>
+            <div class="airline-actions">
+              <button class="view-button" @click="viewAirlineDetail(airline.id)">查看详情</button>
+              <button v-if="airline.status === 'pending'" class="approve-button" @click="approveAirline(airline.id)">通过审核</button>
+              <button v-if="airline.status === 'active'" class="suspend-button" @click="suspendAirline(airline.id)">暂停合作</button>
+              <button v-if="airline.status === 'suspended'" class="activate-button" @click="activateAirline(airline.id)">恢复合作</button>
+              <button class="edit-button" @click="showEditAirlineModal(airline)">编辑</button>
+              <button class="delete-button" @click="deleteAirline(airline.id)">删除</button>
             </div>
           </div>
         </div>
@@ -152,23 +152,23 @@
       </div>
     </div>
     
-    <!-- 添加/编辑旅行社模态框 -->
+    <!-- 添加/编辑航空公司模态框 -->
     <div v-if="showModal" class="modal-overlay" @click="closeModal">
       <div class="modal-content" @click.stop>
         <div class="modal-header">
-          <h2>{{ editingAgency ? '编辑旅行社' : '添加旅行社' }}</h2>
+          <h2>{{ editingAirline ? '编辑航空公司' : '添加航空公司' }}</h2>
           <button class="close-button" @click="closeModal">×</button>
         </div>
         
         <div class="modal-body">
           <form @submit.prevent="handleSubmit">
             <div class="form-group">
-              <label>旅行社名称 *</label>
+              <label>航空公司名称 *</label>
               <input 
                 type="text" 
                 v-model="formData.name"
                 required
-                placeholder="请输入旅行社名称"
+                placeholder="请输入航空公司名称"
               />
             </div>
             
@@ -207,7 +207,7 @@
               <input 
                 type="text" 
                 v-model="formData.address"
-                placeholder="请输入旅行社地址"
+                placeholder="请输入航空公司地址"
               />
             </div>
             
@@ -250,14 +250,14 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: 'AgencyManagement',
+  name: 'AirlineManagement',
   setup() {
     const store = useStore();
     const router = useRouter();
     
     const loading = ref(true);
     const error = ref(null);
-    const agencies = ref([]);
+    const airlines = ref([]);
     const searchQuery = ref('');
     const statusFilter = ref('all');
     const sortBy = ref('name');
@@ -267,7 +267,7 @@ export default defineComponent({
     
     // 模态框相关状态
     const showModal = ref(false);
-    const editingAgency = ref(null);
+    const editingAirline = ref(null);
     const formData = ref({
       name: '',
       contactPerson: '',
@@ -278,22 +278,22 @@ export default defineComponent({
       status: 'pending'
     });
     
-    const totalAgencies = computed(() => agencies.value.length);
+    const totalAirlines = computed(() => airlines.value.length);
     
-    const activeAgencies = computed(() => {
-      return agencies.value.filter(a => a.status === 'active').length;
+    const activeAirlines = computed(() => {
+      return airlines.value.filter(a => a.status === 'active').length;
     });
     
-    const pendingAgencies = computed(() => {
-      return agencies.value.filter(a => a.status === 'pending').length;
+    const pendingAirlines = computed(() => {
+      return airlines.value.filter(a => a.status === 'pending').length;
     });
     
-    const suspendedAgencies = computed(() => {
-      return agencies.value.filter(a => a.status === 'suspended').length;
+    const suspendedAirlines = computed(() => {
+      return airlines.value.filter(a => a.status === 'suspended').length;
     });
     
-    const filteredAgencies = computed(() => {
-      let filtered = [...agencies.value];
+    const filteredAirlines = computed(() => {
+      let filtered = [...airlines.value];
       
       // 搜索过滤
       if (searchQuery.value) {
@@ -337,7 +337,7 @@ export default defineComponent({
     });
     
     const totalPages = computed(() => {
-      let filtered = [...agencies.value];
+      let filtered = [...airlines.value];
       
       // 应用搜索和状态过滤
       if (searchQuery.value) {
@@ -374,30 +374,30 @@ export default defineComponent({
       return pages;
     });
     
-    const fetchAgencies = async () => {
+    const fetchAirlines = async () => {
       loading.value = true;
       error.value = null;
       
       try {
-        // 由于没有实际的旅行社管理API，我们模拟数据
-        // 实际项目中应该调用后端API获取旅行社列表
-        agencies.value = generateMockAgencies();
+        // 由于没有实际的航空公司管理API，我们模拟数据
+        // 实际项目中应该调用后端API获取航空公司列表
+        airlines.value = generateMockAirlines();
       } catch (err) {
-        error.value = err.message || '获取旅行社信息失败';
-        console.error('获取旅行社信息错误:', err);
+        error.value = err.message || '获取航空公司信息失败';
+        console.error('获取航空公司信息错误:', err);
       } finally {
         loading.value = false;
       }
     };
     
-    const generateMockAgencies = () => {
-      const mockAgencies = [];
+    const generateMockAirlines = () => {
+      const mockAirlines = [];
       const statuses = ['active', 'pending', 'suspended'];
       const names = [
-        '环球旅行社', '蓝天国旅', '东方旅行', '星辰旅游', '金色假期',
-        '山水旅行社', '祥云旅游', '友谊旅行', '梦想之旅', '快乐假期',
-        '阳光旅行', '海洋国旅', '大地旅行社', '和风旅行', '彩虹假期',
-        '诚信旅行社', '未来旅行', '自由行', '安心旅游', '环球假期'
+        '中国国际航空', '东方航空', '南方航空', '海南航空', '深圳航空',
+        '厦门航空', '四川航空', '山东航空', '春秋航空', '吉祥航空',
+        '首都航空', '天津航空', '云南祥鹏航空', '奥凯航空', '西部航空',
+        '华夏航空', '幸福航空', '九元航空', '成都航空', '昆明航空'
       ];
       const contactPersons = ['张三', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十'];
       
@@ -411,8 +411,8 @@ export default defineComponent({
           lastOrderDate.setDate(lastOrderDate.getDate() + Math.floor(Math.random() * (new Date() - createdAt) / 86400000));
         }
         
-        mockAgencies.push({
-          id: `agency_${i}`,
+        mockAirlines.push({
+          id: `airline_${i}`,
           name: names[i - 1],
           contactPerson: contactPersons[Math.floor(Math.random() * contactPersons.length)],
           phone: `138${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`,
@@ -428,7 +428,7 @@ export default defineComponent({
         });
       }
       
-      return mockAgencies;
+      return mockAirlines;
     };
     
     const getStatusText = (status) => {
@@ -464,8 +464,8 @@ export default defineComponent({
       }
     };
     
-    const showAddAgencyModal = () => {
-      editingAgency.value = null;
+    const showAddAirlineModal = () => {
+      editingAirline.value = null;
       formData.value = {
         name: '',
         contactPerson: '',
@@ -478,41 +478,41 @@ export default defineComponent({
       showModal.value = true;
     };
     
-    const showEditAgencyModal = (agency) => {
-      editingAgency.value = agency;
+    const showEditAirlineModal = (airline) => {
+      editingAirline.value = airline;
       formData.value = {
-        name: agency.name,
-        contactPerson: agency.contactPerson,
-        phone: agency.phone,
-        email: agency.email,
-        address: agency.address,
-        commissionRate: agency.commissionRate,
-        status: agency.status
+        name: airline.name,
+        contactPerson: airline.contactPerson,
+        phone: airline.phone,
+        email: airline.email,
+        address: airline.address,
+        commissionRate: airline.commissionRate,
+        status: airline.status
       };
       showModal.value = true;
     };
     
     const closeModal = () => {
       showModal.value = false;
-      editingAgency.value = null;
+      editingAirline.value = null;
     };
     
     const handleSubmit = () => {
-      // 在实际项目中，这里应该调用API保存旅行社信息
-      if (editingAgency.value) {
-        // 编辑现有旅行社
-        const index = agencies.value.findIndex(a => a.id === editingAgency.value.id);
+      // 在实际项目中，这里应该调用API保存航空公司信息
+      if (editingAirline.value) {
+        // 编辑现有航空公司
+        const index = airlines.value.findIndex(a => a.id === editingAirline.value.id);
         if (index !== -1) {
-          agencies.value[index] = {
-            ...agencies.value[index],
+          airlines.value[index] = {
+            ...airlines.value[index],
             ...formData.value
           };
         }
-        alert('旅行社信息已更新');
+        alert('航空公司信息已更新');
       } else {
-        // 添加新旅行社
-        const newAgency = {
-          id: `agency_${Date.now()}`,
+        // 添加新航空公司
+        const newAirline = {
+          id: `airline_${Date.now()}`,
           ...formData.value,
           createdAt: new Date().toISOString(),
           lastOrderDate: null,
@@ -520,101 +520,101 @@ export default defineComponent({
           isVerified: formData.value.status === 'active',
           totalRevenue: 0
         };
-        agencies.value.unshift(newAgency);
-        alert('旅行社已添加成功');
+        airlines.value.unshift(newAirline);
+        alert('航空公司已添加成功');
       }
       closeModal();
     };
     
-    const viewAgencyDetail = (agencyId) => {
-      // 在实际项目中，这里应该导航到旅行社详情页面
-      alert(`查看旅行社详情: ${agencyId}`);
+    const viewAirlineDetail = (airlineId) => {
+      // 在实际项目中，这里应该导航到航空公司详情页面
+      alert(`查看航空公司详情: ${airlineId}`);
     };
     
-    const approveAgency = (agencyId) => {
-      if (confirm('确定要通过该旅行社的审核吗？')) {
-        const agency = agencies.value.find(a => a.id === agencyId);
-        if (agency) {
-          agency.status = 'active';
-          agency.isVerified = true;
-          alert('旅行社已通过审核');
+    const approveAirline = (airlineId) => {
+      if (confirm('确定要通过该航空公司的审核吗？')) {
+        const airline = airlines.value.find(a => a.id === airlineId);
+        if (airline) {
+          airline.status = 'active';
+          airline.isVerified = true;
+          alert('航空公司已通过审核');
         }
       }
     };
     
-    const suspendAgency = (agencyId) => {
-      if (confirm('确定要暂停该旅行社的合作吗？')) {
-        const agency = agencies.value.find(a => a.id === agencyId);
-        if (agency) {
-          agency.status = 'suspended';
-          alert('旅行社已暂停合作');
+    const suspendAirline = (airlineId) => {
+      if (confirm('确定要暂停该航空公司的合作吗？')) {
+        const airline = airlines.value.find(a => a.id === airlineId);
+        if (airline) {
+          airline.status = 'suspended';
+          alert('航空公司已暂停合作');
         }
       }
     };
     
-    const activateAgency = (agencyId) => {
-      if (confirm('确定要恢复该旅行社的合作吗？')) {
-        const agency = agencies.value.find(a => a.id === agencyId);
-        if (agency) {
-          agency.status = 'active';
-          agency.isVerified = true;
-          alert('旅行社合作已恢复');
+    const activateAirline = (airlineId) => {
+      if (confirm('确定要恢复该航空公司的合作吗？')) {
+        const airline = airlines.value.find(a => a.id === airlineId);
+        if (airline) {
+          airline.status = 'active';
+          airline.isVerified = true;
+          alert('航空公司合作已恢复');
         }
       }
     };
     
-    const deleteAgency = (agencyId) => {
-      if (confirm('确定要删除该旅行社吗？此操作不可撤销！')) {
-        agencies.value = agencies.value.filter(a => a.id !== agencyId);
-        alert('旅行社已删除');
+    const deleteAirline = (airlineId) => {
+      if (confirm('确定要删除该航空公司吗？此操作不可撤销！')) {
+        airlines.value = airlines.value.filter(a => a.id !== airlineId);
+        alert('航空公司已删除');
       }
     };
     
     onMounted(() => {
-      fetchAgencies();
+      fetchAirlines();
     });
     
     return {
       loading,
       error,
-      agencies,
+      airlines,
       searchQuery,
       statusFilter,
       sortBy,
       sortOrder,
       currentPage,
       showModal,
-      editingAgency,
+      editingAirline,
       formData,
-      totalAgencies,
-      activeAgencies,
-      pendingAgencies,
-      suspendedAgencies,
-      filteredAgencies,
+      totalAirlines,
+      activeAirlines,
+      pendingAirlines,
+      suspendedAirlines,
+      filteredAirlines,
       totalPages,
       visiblePages,
-      fetchAgencies,
+      fetchAirlines,
       getStatusText,
       formatDate,
       handleSearch,
       applyFilters,
       changePage,
-      showAddAgencyModal,
-      showEditAgencyModal,
+      showAddAirlineModal,
+      showEditAirlineModal,
       closeModal,
       handleSubmit,
-      viewAgencyDetail,
-      approveAgency,
-      suspendAgency,
-      activateAgency,
-      deleteAgency
+      viewAirlineDetail,
+      approveAirline,
+      suspendAirline,
+      activateAirline,
+      deleteAirline
     };
   }
 });
 </script>
 
 <style scoped>
-.agency-management-container {
+.airline-management-container {
   min-height: 100vh;
   background-color: #f5f7fa;
   padding: 20px;
@@ -727,7 +727,7 @@ export default defineComponent({
   background-color: #c0392b;
 }
 
-.agency-stats {
+.airline-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
@@ -754,14 +754,14 @@ export default defineComponent({
   color: #7f8c8d;
 }
 
-.agency-filters {
+.airline-filters {
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-.agency-filters select {
+.airline-filters select {
   padding: 8px 12px;
   border: 1px solid #bdc3c7;
   border-radius: 4px;
@@ -771,7 +771,7 @@ export default defineComponent({
   cursor: pointer;
 }
 
-.agency-list {
+.airline-list {
   background: white;
   border-radius: 8px;
   padding: 24px;
@@ -785,19 +785,19 @@ export default defineComponent({
   color: #7f8c8d;
 }
 
-.agency-grid {
+.airline-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
 }
 
 @media (max-width: 768px) {
-  .agency-grid {
+  .airline-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.agency-card {
+.airline-card {
   border: 1px solid #ecf0f1;
   border-radius: 8px;
   padding: 20px;
@@ -805,18 +805,18 @@ export default defineComponent({
   transition: all 0.3s ease;
 }
 
-.agency-card:hover {
+.airline-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.agency-header {
+.airline-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 15px;
 }
 
-.agency-header h3 {
+.airline-header h3 {
   color: #2c3e50;
   margin: 0;
   font-size: 18px;
@@ -842,7 +842,7 @@ export default defineComponent({
   background-color: #e74c3c;
 }
 
-.agency-info {
+.airline-info {
   margin-bottom: 15px;
 }
 
@@ -866,7 +866,7 @@ export default defineComponent({
   font-weight: 500;
 }
 
-.agency-actions {
+.airline-actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -1103,11 +1103,11 @@ export default defineComponent({
     width: 150px;
   }
   
-  .agency-filters {
+  .airline-filters {
     justify-content: space-between;
   }
   
-  .agency-actions {
+  .airline-actions {
     justify-content: center;
   }
   

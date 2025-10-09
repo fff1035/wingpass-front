@@ -17,7 +17,7 @@
           :class="{ active: registerType === 'agency' }"
           @click="setRegisterType('agency')"
         >
-          旅行社注册
+          航空公司注册
         </button>
       </div>
       
@@ -101,15 +101,15 @@
           >
         </div>
         
-        <!-- 旅行社特有字段 -->
+        <!-- 航空公司特有字段 -->
         <div v-if="registerType === 'agency'" class="form-group">
-          <label for="agencyName">旅行社名称</label>
+          <label for="agencyName">航空公司名称</label>
           <input 
             type="text" 
             id="agencyName" 
             v-model="registerData.agencyName" 
             required 
-            placeholder="请输入旅行社名称"
+            placeholder="请输入航空公司名称"
           >
         </div>
         
@@ -167,7 +167,7 @@ export default {
         // 乘客字段
         fullName: '',
         idCard: '',
-        // 旅行社字段
+        // 航空公司字段
         agencyName: '',
         licenseNumber: ''
       },
@@ -226,12 +226,12 @@ export default {
             licenseNumber: this.registerData.licenseNumber
           });
           
-          // 调用旅行社注册（需要管理员权限）
+          // 调用航空公司注册（需要管理员权限）
           await this.store.dispatch('registerAgency', registrationData);
           
-          // 旅行社注册成功后跳转到登录页
+          // 航空公司注册成功后跳转到登录页
           this.router.push('/login');
-          alert('旅行社注册申请已提交，请使用管理员账户审批');
+          alert('航空公司注册申请已提交，请使用管理员账户审批');
           return;
         }
       } catch (error) {

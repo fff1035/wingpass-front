@@ -134,7 +134,7 @@
               <input type="radio" name="paymentMethod" value="travelAgency" v-model="paymentMethod" />
               <div class="option-content">
                 <i class="travel-icon"></i>
-                <span class="option-text">旅行社账户</span>
+                <span class="option-text">航空公司账户</span>
               </div>
             </label>
           </div>
@@ -381,7 +381,7 @@ export default defineComponent({
         'wechat': '微信支付',
         'unionpay': '银联支付',
         'companyAccount': '公司账户',
-        'travelAgency': '旅行社账户'
+        'travelAgency': '航空公司账户'
       };
       return methodTexts[method] || method;
     };
